@@ -64,6 +64,7 @@ class Leveling(commands.Cog):
                 self.cursor.execute("UPDATE users SET xp = ?, last_message_time = ? WHERE user_id = ?",
                                   (new_xp, current_time, user_id))
             self.conn.commit()
+            print(f"[XP] {message.author.name} -> gained:{gained_xp} total_xp:{new_xp} level:{new_level}")
 
             if level_up:
                 embed = discord.Embed(
@@ -79,6 +80,7 @@ class Leveling(commands.Cog):
         member = member or ctx.author
         self.cursor.execute("SELECT xp, level FROM users WHERE user_id = ?", (member.id,))
         result = self.cursor.fetchone()
+        print(f"[RANK] {member.name} result={result}")
 
         if result is None:
             await ctx.send(f"{member.mention} henüz hiç XP kazanmamış.")
