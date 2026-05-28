@@ -3,5 +3,3 @@ requests
 aiohttp
 flask
 aiosqlite
-pycryptodome
-pywin32
