@@ -89,6 +89,13 @@ class Leveling(commands.Cog):
         embed.set_thumbnail(url=member.display_avatar.url)
         await ctx.send(embed=embed)
 
+    @commands.command(name="avatar")
+    async def avatar(self, ctx, member: discord.Member = None):
+        member = member or ctx.author
+        embed = discord.Embed(title=f"{member.name}", color=config.NAVY)
+        embed.set_image(url=member.display_avatar.url)
+        await ctx.send(embed=embed)
+
     @commands.command(name="top")
     async def leaderboard(self, ctx):
         self.cursor.execute("SELECT user_id, xp, level FROM users ORDER BY level DESC, xp DESC LIMIT 10")
