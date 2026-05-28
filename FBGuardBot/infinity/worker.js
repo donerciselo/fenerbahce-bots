@@ -1,11 +1,15 @@
-// Cloudflare Worker — Discord Verify Relay
-// 1. Go to https://workers.cloudflare.com
-// 2. Create a new Worker, paste this code
-// 3. Go to Settings → Variables → Add BOT_TOKEN (your bot token)
-// 4. Deploy, copy the URL → paste in index.php as WORKER_URL
-
 export default {
   async fetch(request, env) {
+    if (request.method === 'OPTIONS') {
+      return new Response(null, {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type',
+        },
+      })
+    }
+
     if (request.method !== 'POST') return new Response('Method not allowed', { status: 405 })
 
     const { user_id, guild_id } = await request.json()
@@ -26,6 +30,8 @@ export default {
       }
     }
 
-    return new Response('ok')
+    return new Response('ok', {
+      headers: { 'Access-Control-Allow-Origin': '*' },
+    })
   }
 }
