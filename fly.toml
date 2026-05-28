@@ -1,0 +1,18 @@
+app = "fbbot"
+primary_region = "fra"
+
+[build]
+
+[processes]
+  worker = "python run_all.py"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"
+
+[[mounts]]
+  source = "fb_data"
+  destination = "/data"
+
+[env]
+  DATA_DIR = "/data"
