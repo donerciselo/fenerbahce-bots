@@ -44,7 +44,10 @@ async def on_command_error(ctx, error):
         pass
 
 if __name__ == "__main__":
-    t = threading.Thread(target=_start_flask, daemon=True)
-    t.start()
-    print("[+] Flask baslatildi (background thread)")
+    if not os.getenv("RAILWAY"):
+        t = threading.Thread(target=_start_flask, daemon=True)
+        t.start()
+        print("[+] Flask baslatildi (background thread)")
+    else:
+        print("[*] Railway'de Flask baslatilmadi (RAILWAY env var)")
     bot.run(config.TOKEN)
