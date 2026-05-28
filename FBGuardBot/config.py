@@ -22,7 +22,7 @@ def _load_env():
 _load_env()
 
 TOKEN = os.getenv("DISCORD_TOKEN", "")
-PREFIX = "-"
+PREFIX = "+"
 
 COLOR_CRITICAL = 0xFF0000
 COLOR_WARNING = 0xFFA500

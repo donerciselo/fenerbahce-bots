@@ -4,6 +4,7 @@ import aiohttp
 from datetime import datetime
 import config
 import asyncio
+import os
 
 class YoutubeAlarm(commands.Cog):
     def __init__(self, bot):
@@ -17,6 +18,25 @@ class YoutubeAlarm(commands.Cog):
 
     def cog_unload(self):
         self.live_check_loop.cancel()
+
+    def _save_env(self, key, value):
+        lines = []
+        found = False
+        try:
+            with open(".env", "r") as f:
+                for line in f:
+                    if line.startswith(f"{key}="):
+                        lines.append(f"{key}={value}\n")
+                        found = True
+                    else:
+                        lines.append(line)
+        except FileNotFoundError:
+            pass
+        if not found:
+            lines.append(f"{key}={value}\n")
+        with open(".env", "w") as f:
+            f.writelines(lines)
+        os.environ[key] = value
 
     async def check_youtube_live(self):
         url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&channelId={self.bot.FB_CHANNEL_ID}&type=video&eventType=live&key={self.bot.YOUTUBE_API_KEY}"
@@ -87,10 +107,13 @@ class YoutubeAlarm(commands.Cog):
         self.voice_channel_id = voice_channel.id
         self.waiting_channel_id = waiting_channel.id
 
-        # Kalıcılık için bot nesnesine de kaydet
         self.bot.TEXT_CHANNEL_ID = text_channel.id
         self.bot.VOICE_CHANNEL_ID = voice_channel.id
         self.bot.WAITING_CHANNEL_ID = waiting_channel.id
+
+        self._save_env("TEXT_CHANNEL_ID", str(text_channel.id))
+        self._save_env("VOICE_CHANNEL_ID", str(voice_channel.id))
+        self._save_env("WAITING_CHANNEL_ID", str(waiting_channel.id))
 
         embed = discord.Embed(title="✅ Yayın Kanalları Ayarlandı", color=0x000080)
         embed.add_field(name="📢 Duyuru Kanalı", value=text_channel.mention)
@@ -121,9 +144,9 @@ intents.members = True
 intents.voice_states = True
 
 bot = commands.Bot(command_prefix="+", intents=intents)
-bot.TEXT_CHANNEL_ID = None
-bot.VOICE_CHANNEL_ID = None
-bot.WAITING_CHANNEL_ID = None
+bot.TEXT_CHANNEL_ID = config.TEXT_CHANNEL_ID
+bot.VOICE_CHANNEL_ID = config.VOICE_CHANNEL_ID
+bot.WAITING_CHANNEL_ID = config.WAITING_CHANNEL_ID
 bot.FB_CHANNEL_ID = config.FB_CHANNEL_ID
 bot.YOUTUBE_API_KEY = config.YOUTUBE_API_KEY
 
