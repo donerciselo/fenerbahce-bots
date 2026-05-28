@@ -7,5 +7,3 @@ aiohttp
 flask
 chat-exporter
 aiosqlite
-pycryptodome
-pywin32
