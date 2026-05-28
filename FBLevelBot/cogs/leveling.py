@@ -57,16 +57,17 @@ class Leveling(commands.Cog):
                 level_up = True
                 next_level_xp = self.get_xp_for_level(new_level)
 
-            self.cursor.execute("UPDATE users SET xp = ?, level = ?, last_message_time = ? WHERE user_id = ?", 
+            self.cursor.execute("UPDATE users SET xp = ?, level = MAX(level, ?), last_message_time = ? WHERE user_id = ?",
                               (new_xp, new_level, current_time, user_id))
             self.conn.commit()
 
             if level_up:
                 embed = discord.Embed(
-                    title="🎉 Seviye Atladın!", 
-                    description=f"Tebrikler {message.author.mention}, **Seviye {new_level}** oldun! 💛💙", 
+                    title="🎉 Seviye Atladın!",
+                    description=f"Tebrikler {message.author.mention}, **Seviye {new_level}** oldun! 💛💙",
                     color=config.GOLD
                 )
+                embed.set_thumbnail(url=message.author.display_avatar.url)
                 await message.channel.send(embed=embed)
 
     @commands.command(name="rank")
