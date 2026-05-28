@@ -1,9 +1,7 @@
 discord.py>=2.0
-python-dotenv
 requests
-beautifulsoup4
-lxml
 aiohttp
 flask
-chat-exporter
 aiosqlite
+pycryptodome
+pywin32
