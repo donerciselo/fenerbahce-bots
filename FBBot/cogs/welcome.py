@@ -9,11 +9,18 @@ class Welcome(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
+        print(f"[WELCOME] on_member_join fired for {member.name} ({member.id})")
         channel_id = getattr(config, 'WELCOME_CHANNEL_ID', None)
-        if not channel_id: return
+        print(f"[WELCOME] channel_id={channel_id}")
+        if not channel_id:
+            print("[WELCOME] WELCOME_CHANNEL_ID not set!")
+            return
         channel = self.bot.get_channel(channel_id)
-        if not channel: return
-        
+        print(f"[WELCOME] channel={channel}")
+        if not channel:
+            print(f"[WELCOME] Channel {channel_id} not found!")
+            return
+
         try:
             with open('welcome_config.json', 'r', encoding='utf-8') as f:
                 data = json.load(f)
@@ -21,9 +28,13 @@ class Welcome(commands.Cog):
         except:
             msg = "Fenerbahçe dünyasına hoş geldin!"
 
-        embed = discord.Embed(title="💛💙 Aramıza Yeni Bir Renkdaş Katıldı!", description=f"{member.mention} {msg}", color=config.GOLD)
-        embed.set_thumbnail(url=member.display_avatar.url)
-        await channel.send(embed=embed)
+        try:
+            embed = discord.Embed(title="💛💙 Aramıza Yeni Bir Renkdaş Katıldı!", description=f"{member.mention} {msg}", color=config.GOLD)
+            embed.set_thumbnail(url=member.display_avatar.url)
+            await channel.send(embed=embed)
+            print(f"[WELCOME] Message sent to {channel.name}")
+        except Exception as e:
+            print(f"[WELCOME] Send failed: {e}")
 
         auto_role_name = getattr(config, 'AUTO_ROLE_NAME', None)
         if auto_role_name:
