@@ -48,8 +48,8 @@ class Leveling(commands.Cog):
             new_xp = xp + gained_xp
             new_level = level
 
-            next_level_xp = self.get_xp_for_level(level)
-            
+            next_level_xp = self.get_xp_for_level(new_level)
+
             level_up = False
             while new_xp >= next_level_xp:
                 new_xp -= next_level_xp
@@ -57,8 +57,12 @@ class Leveling(commands.Cog):
                 level_up = True
                 next_level_xp = self.get_xp_for_level(new_level)
 
-            self.cursor.execute("UPDATE users SET xp = ?, level = MAX(level, ?), last_message_time = ? WHERE user_id = ?",
-                              (new_xp, new_level, current_time, user_id))
+            if new_level > level:
+                self.cursor.execute("UPDATE users SET xp = ?, level = ?, last_message_time = ? WHERE user_id = ?",
+                                  (new_xp, new_level, current_time, user_id))
+            else:
+                self.cursor.execute("UPDATE users SET xp = ?, last_message_time = ? WHERE user_id = ?",
+                                  (new_xp, current_time, user_id))
             self.conn.commit()
 
             if level_up:
