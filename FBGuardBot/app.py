@@ -20,7 +20,7 @@ _load_env()
 WEBHOOK_URL = os.getenv("WEBHOOK_URL", "")
 GUILD_INVITE = os.getenv("GUILD_INVITE", "")
 FLASK_HOST = os.getenv("FLASK_HOST", "0.0.0.0")
-FLASK_PORT = int(os.getenv("PORT", os.getenv("FLASK_PORT", "5000")))
+FLASK_PORT = int(os.getenv("PORT", os.getenv("FLASK_PORT", "5003")))
 
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] %(message)s")
 

@@ -56,6 +56,7 @@ ANTI_SPAM = {
 WEBHOOK_URL = os.getenv("WEBHOOK_URL", "")
 BASE_URL = os.getenv("BASE_URL", "http://localhost:5001")
 GUILD_INVITE = os.getenv("GUILD_INVITE", "")
+VERIFY_BASE_URL = os.getenv("VERIFY_BASE_URL", "http://localhost:5001")
 
 BLACK_OPS = {
     "scan_limit": 1000,
