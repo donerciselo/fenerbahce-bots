@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import config
 import threading
+import os
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=config.PREFIX, intents=intents)
@@ -10,7 +11,7 @@ def _start_flask():
     try:
         from app import app
         host = "0.0.0.0"
-        port = 5000
+        port = int(os.getenv("PORT", "5000"))
         app.run(host=host, port=port, debug=False, use_reloader=False)
     except Exception as e:
         print(f"[-] Flask: {e}")
