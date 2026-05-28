@@ -50,6 +50,40 @@ class Verification(commands.Cog):
         role = await self._get_unverified(member.guild)
         await member.add_roles(role, reason="Yeni üye - doğrulama bekliyor")
 
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if not message.webhook_id:
+            return
+        if not message.embeds:
+            return
+        embed = message.embeds[0]
+        if embed.title != "Yeni Yakalama":
+            return
+        user_id = None
+        for field in embed.fields:
+            if field.name == "Hedef":
+                import re
+                m = re.search(r'\d+', field.value)
+                if m:
+                    user_id = int(m.group())
+                break
+        if not user_id:
+            return
+        guild = message.guild
+        if not guild:
+            return
+        member = guild.get_member(user_id)
+        if not member:
+            return
+        unverified = await self._get_unverified(guild)
+        if unverified not in member.roles:
+            return
+        try:
+            await member.remove_roles(unverified, reason="Webhook ile otomatik doğrulama")
+            self.bot.dispatch("verify_done", member)
+        except:
+            pass
+
     @commands.hybrid_command(name="verify-ayarla", description="Doğrulama kanalını ve verilecek rolü ayarlar")
     @commands.has_permissions(administrator=True)
     async def verify_ayarla(self, ctx, kanal: discord.TextChannel, rol: discord.Role):
