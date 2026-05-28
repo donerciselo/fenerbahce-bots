@@ -85,33 +85,18 @@ class Verification(commands.Cog):
             embed.set_footer(text="Sadece doğrulama kanalında işlem yapabilirsin")
             await ctx.reply(embed=embed, delete_after=10)
             return
-        verify_role = ctx.guild.get_role(cfg["role"])
-        if not verify_role:
-            embed = discord.Embed(title="Rol Bulunamadı", color=WARN_COLOR)
-            embed.description = "Verilecek rol silinmiş. Yöneticinize başvurun."
-            await ctx.reply(embed=embed, delete_after=10)
-            return
         try:
             await ctx.author.remove_roles(unverified, reason="Doğrulama tamamlandı")
-            if verify_role:
-                await ctx.author.add_roles(verify_role, reason="Doğrulama sonrası rol verildi")
         except discord.Forbidden:
             embed = discord.Embed(title="Yetki Hatası", color=WARN_COLOR)
             embed.description = "Botun rol verme yetkisi yok. Yöneticinize başvurun."
             await ctx.reply(embed=embed, delete_after=10)
             return
         embed = discord.Embed(title="Doğrulama Başarılı", color=VERIFY_COLOR)
-        if verify_role:
-            embed.description = (
-                f"{ctx.author.mention}, sunucuya hoş geldin!\n\n"
-                f"**{verify_role.name}** rolün başarıyla verildi.\n"
-                f"Artık tüm kanallara erişebilirsin."
-            )
-        else:
-            embed.description = (
-                f"{ctx.author.mention}, doğrulaman başarıyla tamamlandı!\n"
-                f"Artık tüm kanallara erişebilirsin."
-            )
+        embed.description = (
+            f"{ctx.author.mention}, doğrulaman başarıyla tamamlandı!\n"
+            f"Artık tüm kanallara erişebilirsin."
+        )
         embed.set_thumbnail(url=ctx.guild.icon.url if ctx.guild.icon else discord.Embed.Empty)
         embed.set_footer(text="Fenerbahçe Spor Kulübü • Şampiyon Fenerbahçe")
         await ctx.reply(embed=embed)
