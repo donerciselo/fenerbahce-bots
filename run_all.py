@@ -10,6 +10,7 @@ BOTS = [
     {"name": "FBLevelBot", "cmd": [sys.executable, "main.py"], "dir": "FBLevelBot"},
     {"name": "FBTicketBot", "cmd": [sys.executable, "bot.py"], "dir": "FBTicketBot"},
     {"name": "FBYayinBot", "cmd": [sys.executable, "main.py"], "dir": "FBYayinBot"},
+    {"name": "FBGuardBot", "cmd": [sys.executable, "main.py"], "dir": "FBGuardBot"},
 ]
 
 processes = []
